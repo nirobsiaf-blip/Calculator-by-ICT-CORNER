@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casio fx-991MS 2nd Edition - Authentic Web Simulator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #11141a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .calc-body {
+            width: 100%;
+            max-width: 385px;
+            background: linear-gradient(135deg, #3d4450 0%, #1c1f26 100%);
+            border-radius: 20px 20px 40px 40px;
+            padding: 16px;
+            box-shadow: inset 0 3px 6px rgba(255,255,255,0.15),
+                        0 20px 45px rgba(0,0,0,0.8);
+            border: 4px solid #232731;
+            position: relative;
+        }
+
+        /* Branding Panel Configuration */
+        .brand-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .brand-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 22px;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .svpam-text {
+            font-size: 11px;
+            color: #00ff88;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        .model-edition {
+            font-size: 10px;
+            color: #a0aec0;
+            font-weight: bold;
+        }
+
+        .solar-cell-panel {
+            width: 82px;
+            height: 25px;
+            background: linear-gradient(to right, #241103, #3d1b06, #241103);
+            border: 2px solid #000;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px;
+        }
+
+        .solar-grid-line { width: 1px; height: 100%; background-color: #0f0f0f; }
+
+        /* Authentic Dual Line LCD Unit Screen */
+        .screen-chassis {
+            background: linear-gradient(to bottom, #9ca998 0%, #83917f 100%);
+            border: 5px solid #1c1f26;
+            border-radius: 8px;
+            padding: 6px 12px;
+            margin-bottom: 22px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.6);
+            height: 98px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .status-indicators {
+            font-size: 9px;
+            color: #111;
+            font-weight: bold;
+            display: flex;
+            gap: 12px;
+            height: 14px;
+        }
+
+        .flag-icon { opacity: 0.08; }
+        .flag-icon.active { opacity: 1; }
+        .shift-active-txt { color: #d35400; }
+        .alpha-active-txt { color: #c0392b; }
+
+        .radix-mode-tag {
+            margin-left: auto;
+            font-weight: 900;
+            font-size: 12px;
+            color: #111;
+            display: none;
+        }
+
+        .line-input {
+            font-family: 'Courier New', monospace;
+            font-size: 19px;
+            color: #111;
+            text-align: left;
+            white-space: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            height: 24px;
+        }
+        .line-input::-webkit-scrollbar { display: none; }
+
+        .line-result {
+            font-family: 'Courier New', monospace;
+            font-size: 25px;
+            font-weight: bold;
+            color: #111;
+            text-align: right;
+            height: 30px;
+        }
+
+        /* 6 Column Operational Button Matrix Grid */
+        .keypad-grid-chassis {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: 8px 6px;
+        }
+
+        /* Replay Wheel Control Layout */
+        .dpad-row-chassis {
+            grid-column: span 6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .key-wrapper-node {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lbl-shift-gold {
+            font-size: 8px;
+            font-weight: bold;
+            color: #f39c12;
+            position: absolute;
+            top: -12px;
+            left: 2px;
+            white-space: nowrap;
+        }
+
+        .lbl-alpha-purple {
+            font-size: 8px;
+            font-weight: bold;
+            color: #ff6b6b;
+            position: absolute;
+            top: -12px;
+            right: 2px;
+            white-space: nowrap;
+        }
+
+        .lbl-base-n-green {
+            font-size: 8px;
+            font-weight: bold;
+            color: #2ecc71;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .btn-calc-core {
+            width: 100%;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #11141a, 0 4px 5px rgba(0,0,0,0.4);
+            transition: all 0.04s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .btn-calc-core:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 #11141a, 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Specific Button Variant Classes */
+        .btn-oval-utility {
+            background: linear-gradient(to bottom, #636e72 0%, #2d3436 100%);
+            border-radius: 12px / 8px;
+            height: 25px;
+            font-size: 9px;
+            box-shadow: 0 2px 0 #111;
+        }
+
+        .btn-dark-scientific {
+            background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
+            border-bottom: 2px solid #1a202c;
+            font-size: 10px;
+            height: 28px;
+        }
+
+        .btn-light-numeric {
+            background: linear-gradient(to bottom, #fcfcfc 0%, #dcdde1 100%);
+            color: #2f3640;
+            font-size: 18px;
+            border-bottom: 3.5px solid #b2bec3;
+            height: 40px;
+            border-radius: 6px;
+        }
+        .btn-light-numeric:active {
+            box-shadow: 0 0px 0 #b2bec3, 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-action-orange {
+            background: linear-gradient(to bottom, #e67e22 0%, #d35400 100%);
+            border-bottom: 3.5px solid #9e3602;
+            font-size: 14px;
+            height: 40px;
+        }
+
+        /* Circular Physical Replay Wheel Pad Graphic */
+        .replay-wheel-pad {
+            width: 78px;
+            height: 78px;
+            background: linear-gradient(135deg, #f5f6fa 0%, #b2bec3 100%);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -10px;
+            border: 3px solid #4a5568;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.45);
+            z-index: 10;
+        }
+
+        .dpad-arrow-node {
+            position: absolute;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #2f3640;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .arrow-pos-t { top: 2px; left: 33px; }
+        .arrow-pos-b { bottom: 2px; left: 33px; }
+        .arrow-pos-l { left: 4px; top: 28px; }
+        .arrow-pos-r { right: 4px; top: 28px; }
+        .txt-replay-disk-center {
+            position: absolute;
+            top: 32px; left: 19px; font-size: 8px; font-weight: bold; color: #4a5568;
+        }
+
+        /* Mode Dynamic Overlay Interface System */
+        .system-mode-overlay {
+            position: absolute;
+            top: 35px; left: 20px; right: 20px;
+            background: #dfe6e9;
+            border: 3px solid #2d3436;
+            border-radius: 5px;
+            padding: 8px;
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 6px;
+            z-index: 99;
+            font-size: 11px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        .mode-click-target { cursor: pointer; padding: 4px; text-align: center; background: #b2bec3; border-radius: 3px; }
+        .mode-click-target:hover { background: #636e72; color: #fff; }
+
+        .sci-grid-block { grid-column: span 6; display: grid; grid-template-columns: repeat(6, 1fr); grid-gap: 8px 6px; }
+        .num-grid-block { grid-column: span 6; display: grid; grid-template-columns: repeat(5, 1fr); grid-gap: 10px 7px; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+<div class="calc-body">
+    <div class="system-mode-overlay" id="dom-mode-overlay">
+        <div class="mode-click-target" onclick="switchEngineSystemMode('COMP')">1<br>COMP</div>
+        <div class="mode-click-target" onclick="switchEngineSystemMode('CMPLX')">2<br>CMPLX</div>
+        <div class="mode-click-target" onclick="switchEngineSystemMode('BASE-N')">3<br>BASE-N</div>
+    </div>
+
+    <div class="brand-container">
+        <div>
+            <div class="brand-text">CASIO</div>
+            <div class="svpam-text">S-V.P.A.M.</div>
+            <div class="model-edition">fx-991MS <span style="font-size:7px; color:#ff6b6b;">2nd edition</span></div>
+        </div>
+        <div class="solar-cell-panel">
+            <div class="solar-grid-line"></div>
+            <div class="solar-grid-line"></div>
+            <div class="solar-grid-line"></div>
+            <div class="solar-grid-line"></div>
+        </div>
+    </div>
+
+    <div class="screen-chassis">
+        <div class="status-indicators">
+            <span id="flag-shift-node" class="flag-icon shift-active-txt">S</span>
+            <span id="flag-alpha-node" class="flag-icon alpha-active-txt">A</span>
+            <span id="flag-m-node" class="flag-icon">M</span>
+            <span class="flag-icon active" id="flag-math-engine">Math</span>
+            <span class="radix-mode-tag" id="dom-radix-tag">D</span>
+        </div>
+        <div class="line-input" id="dom-input-buffer"></div>
+        <div class="line-result" id="dom-result-buffer">0</div>
+    </div>
+
+    <div class="keypad-grid-chassis">
+        
+        <div class="dpad-row-chassis">
+            <div class="key-wrapper-node" style="width: 44px;">
+                <button class="btn-calc-core btn-oval-utility" onclick="toggleShiftState()">SHIFT</button>
+            </div>
+            <div class="key-wrapper-node" style="width: 44px;">
+                <button class="btn-calc-core btn-oval-utility" style="color: #ff9f9f;" onclick="toggleAlphaState()">ALPHA</button>
+            </div>
+
+            <div class="replay-wheel-pad">
+                <button class="dpad-arrow-node arrow-pos-t" onclick="console.log('Nav Up')">▲</button>
+                <button class="dpad-arrow-node arrow-pos-l" onclick="console.log('Nav Left')">◀</button>
+                <div class="txt-replay-disk-center">REPLAY</div>
+                <button class="dpad-arrow-node arrow-pos-r" onclick="console.log('Nav Right')">▶</button>
+                <button class="dpad-arrow-node arrow-pos-b" onclick="console.log('Nav Down')">▼</button>
+            </div>
+
+            <div class="key-wrapper-node" style="width: 44px; margin-left: auto; margin-right: 5px;">
+                <button class="btn-calc-core btn-oval-utility" onclick="triggerModeMenuOverlay()">MODE</button>
+            </div>
+            <div class="key-wrapper-node" style="width: 44px;">
+                <button class="btn-calc-core btn-oval-utility" onclick="resetCalculatorWorkspace()">ON</button>
+            </div>
+        </div>
+
+        <div class="sci-grid-block">
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">SOLVE</span><span class="lbl-alpha-purple">=</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('calc')">CALC</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">d/dx</span><span class="lbl-alpha-purple">:</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('∫')">∫dx</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">x!</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('^-1')">x⁻¹</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">∑</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('logbase')">logₘ■</button></div>
+            <div class="key-wrapper-node" style="grid-column: span 2; opacity: 0; pointer-events: none;"></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">▰/▱</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('/')">■/■</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">∛</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('sqrt')">√</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">x³</span><span class="lbl-base-n-green">DEC</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('^2')">x²</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">■^■</span><span class="lbl-base-n-green">HEX</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('^')">x■</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">10^x</span><span class="lbl-base-n-green">BIN</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('log')">log</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">e^x</span><span class="lbl-base-n-green">OCT</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('ln')">ln</button></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">←</span><span class="lbl-alpha-purple">A</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('(-)')">(-)</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">←</span><span class="lbl-alpha-purple">B</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('deg')">°'\"</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">Abs</span><span class="lbl-alpha-purple">C</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('abs')">hyp</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">sin⁻¹</span><span class="lbl-alpha-purple">D</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('sin')">sin</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">cos⁻¹</span><span class="lbl-alpha-purple">E</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('cos')">cos</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">tan⁻¹</span><span class="lbl-alpha-purple">F</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('tan')">tan</button></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">STO</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('rcl')">RCL</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">←</span><button class="btn-calc-core btn-dark-scientific" onclick="executeSciAction('eng')">ENG</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">←</span><span class="lbl-alpha-purple">X</span><button class="btn-calc-core btn-dark-scientific" onclick="appendNumericToken('(')">(</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">←</span><span class="lbl-alpha-purple">Y</span><button class="btn-calc-core btn-dark-scientific" onclick="appendNumericToken(')')">)</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">a⇔b</span><button class="btn-calc-core btn-dark-scientific" onclick="triggerSDTransformation()">S⇔D</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">M-</span><span class="lbl-alpha-purple">M</span><button class="btn-calc-core btn-dark-scientific" onclick="processMPlusAccumulation()">M+</button></div>
+        </div>
+
+        <div class="num-grid-block">
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">CONST</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('7')">7</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">CONV</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('8')">8</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">CLR</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('9')">9</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-action-orange" onclick="deleteLastTokenChar()">DEL</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-action-orange" onclick="resetCalculatorWorkspace()">AC</button></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">MATRIX</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('4')">4</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">VECTOR</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('5')">5</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">BASE</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('6')">6</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-light-numeric" style="font-size: 20px;" onclick="appendOperatorToken('*')">×</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-light-numeric" style="font-size: 20px;" onclick="appendOperatorToken('/')">÷</button></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">STAT</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('1')">1</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">CMPLX</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('2')">2</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">BASE-N</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('3')">3</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-light-numeric" style="font-size: 20px;" onclick="appendOperatorToken('+')">+</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-light-numeric" style="font-size: 20px;" onclick="appendOperatorToken('-')">-</button></div>
+
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">Rnd</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('0')">0</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">Ran#</span><button class="btn-calc-core btn-light-numeric" onclick="appendNumericToken('.')">•</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">π</span><span class="lbl-alpha-purple">e</span><button class="btn-calc-core btn-light-numeric" style="font-size: 13px;" onclick="appendOperatorToken('*10^')">×10ˣ</button></div>
+            <div class="key-wrapper-node"><span class="lbl-shift-gold">DRG►</span><button class="btn-calc-core btn-light-numeric" style="font-size: 12px;" onclick="appendAnsRegister()">Ans</button></div>
+            <div class="key-wrapper-node"><span></span><button class="btn-calc-core btn-light-numeric" style="background: #b2bec3; font-size: 20px;" onclick="pipelineExecutionWorkflow()">=</button></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let workspaceInputString = "";
+    let memoryRegisterValue = 0;
+    let backupLastAnsValue = 0;
+    let globalActiveMode = "COMP"; // COMP, CMPLX, BASE-N
+    let activeRadix = "DEC"; // DEC, HEX, BIN, OCT
+
+    // Key Modifiers Flags Tracker
+    let isShiftToggled = false;
+    let isAlphaToggled = false;
+    let isConstModeToggled = false;
+
+    // Authentic Casio Engineering Constant Registry Data Table
+    const engineeringConstantsRegistry = {
+        "1": 5.67037e-8,  // sigma
+        "2": 9.80665,     // g (gravity acceleration metric)
+        "3": 6.67430e-11, // G (gravitation constant value)
+        "4": 2.99792e8,   // c (speed of light vector speed)
+        "5": 1.60217e-19, // e (elementary particle charge)
+        "6": 6.62607e-34, // h (Planck configuration constant)
+        "7": 1.05457e-34, // h-bar
+        "8": 9.10938e-31, // m_e (mass of resting electron)
+        "9": 1.67262e-27  // m_p (mass of proton)
+    };
+
+    // Cache View Nodes elements
+    const viewInputNode = document.getElementById('dom-input-buffer');
+    const viewResultNode = document.getElementById('dom-result-buffer');
+    const iconShiftModifier = document.getElementById('flag-shift-node');
+    const iconAlphaModifier = document.getElementById('flag-alpha-node');
+    const systemRadixTag = document.getElementById('dom-radix-tag');
+    const overlayModeChassis = document.getElementById('dom-mode-overlay');
+
+    function syncWorkspaceDisplayView() {
+        let cosmeticString = workspaceInputString
+            .replace(/\*/g, '×')
+            .replace(/\//g, '÷')
+            .replace(/sqrt/g, '√')
+            .replace(/pi/g, 'π');
+        viewInputNode.innerText = cosmeticString;
+    }
+
+    function appendNumericToken(token) {
+        if (isShiftToggled) {
+            isShiftToggled = false;
+            iconShiftModifier.classList.remove('active');
+            
+            if (token === '7') { // Shift + 7 trigger constant logic
+                isConstModeToggled = true;
+                viewResultNode.innerText = "CONST _";
+                return;
+            }
+        }
+
+        // Shift Alphabet Letters Matrix processing rule if alpha flag active
+        if (isAlphaToggled) {
+            isAlphaToggled = false;
+            iconAlphaModifier.classList.remove('active');
+            // Mapping letters tokens inside memory variables array if required by user setup
+        }
+
+        if (isConstModeToggled) {
+            isConstModeToggled = false;
+            if (engineeringConstantsRegistry[token]) {
+                workspaceInputString += engineeringConstantsRegistry[token];
+            } else {
+                workspaceInputString += "0";
+            }
+            viewResultNode.innerText = "0";
+            syncWorkspaceDisplayView();
+            return;
+        }
+
+        workspaceInputString += token;
+        syncWorkspaceDisplayView();
+    }
+
+    function appendOperatorToken(operator) {
+        workspaceInputString += operator;
+        syncWorkspaceDisplayView();
+    }
+
+    function executeSciAction(fnCode) {
+        // RADIX HIJACK ENGINE LAYER: Hijack logic targets inside Base-N Mode Matrix
+        if (globalActiveMode === "BASE-N") {
+            let runningDisplayStringValue = viewResultNode.innerText;
+            let standardDecimalBaseInt = 0;
+
+            try {
+                if (activeRadix === "DEC") standardDecimalBaseInt = parseInt(runningDisplayStringValue, 10);
+                else if (activeRadix === "HEX") standardDecimalBaseInt = parseInt(runningDisplayStringValue, 16);
+                else if (activeRadix === "BIN") standardDecimalBaseInt = parseInt(runningDisplayStringValue, 2);
+                else if (activeRadix === "OCT") standardDecimalBaseInt = parseInt(runningDisplayStringValue, 8);
+                if (isNaN(standardDecimalBaseInt)) standardDecimalBaseInt = 0;
+            } catch(e) { standardDecimalBaseInt = 0; }
+
+            if (fnCode === '^2') { // DEC Target trigger
+                activeRadix = "DEC";
+                systemRadixTag.innerText = "D";
+                viewResultNode.innerText = standardDecimalBaseInt.toString(10);
+            } else if (fnCode === '^') { // HEX Target trigger
+                activeRadix = "HEX";
+                systemRadixTag.innerText = "H";
+                viewResultNode.innerText = standardDecimalBaseInt.toString(16).toUpperCase();
+            } else if (fnCode === 'log') { // BIN Target trigger
+                activeRadix = "BIN";
+                systemRadixTag.innerText = "B";
+                viewResultNode.innerText = standardDecimalBaseInt.toString(2);
+            } else if (fnCode === 'ln') { // OCT Target trigger
+                activeRadix = "OCT";
+                systemRadixTag.innerText = "O";
+                viewResultNode.innerText = standardDecimalBaseInt.toString(8);
+            }
+            return; // Terminate math execution flow immediately
+        }
+
+        // Standard Scientific Layout execution logic flow paths
+        if (isShiftToggled) {
+            isShiftToggled = false;
+            iconShiftModifier.classList.remove('active');
+            
+            if (fnCode === 'sin') workspaceInputString += 'asin(';
+            else if (fnCode === 'cos') workspaceInputString += 'acos(';
+            else if (fnCode === 'tan') workspaceInputString += 'atan(';
+            else if (fnCode === 'sqrt') workspaceInputString += 'cbrt(';
+            else if (fnCode === '^2') workspaceInputString += '^3';
+            else if (fnCode === '^-1') workspaceInputString += '!';
+            else workspaceInputString += fnCode + '^(';
+        } else {
+            if (['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', 'abs'].includes(fnCode)) {
+                workspaceInputString += fnCode + '(';
+            } else if (['^-1', '^2', '^'].includes(fnCode)) {
+                workspaceInputString += fnCode;
+            } else if (fnCode === '(-)') {
+                workspaceInputString += '-';
+            } else {
+                workspaceInputString += fnCode;
+            }
+        }
+        syncWorkspaceDisplayView();
+    }
+
+    function triggerModeMenuOverlay() {
+        overlayModeChassis.style.display = (overlayModeChassis.style.display === 'grid') ? 'none' : 'grid';
+    }
+
+    function switchEngineSystemMode(modeToken) {
+        overlayModeChassis.style.display = 'none';
+        globalActiveMode = modeToken;
+        
+        if (modeToken === "BASE-N") {
+            systemRadixTag.style.display = 'block';
+            activeRadix = "DEC";
+            systemRadixTag.innerText = "D";
+        } else {
+            systemRadixTag.style.display = 'none';
+        }
+        resetCalculatorWorkspace();
+    }
+
+    function toggleShiftState() {
+        isShiftToggled = !isShiftToggled;
+        isAlphaToggled = false;
+        iconShiftModifier.classList.toggle('active', isShiftToggled);
+        iconAlphaModifier.classList.remove('active');
+    }
+
+    function toggleAlphaState() {
+        isAlphaToggled = !isAlphaToggled;
+        isShiftToggled = false;
+        iconAlphaModifier.classList.toggle('active', isAlphaToggled);
+        iconShiftModifier.classList.remove('active');
+    }
+
+    function resetCalculatorWorkspace() {
+        workspaceInputString = "";
+        viewResultNode.innerText = "0";
+        isShiftToggled = false;
+        isAlphaToggled = false;
+        isConstModeToggled = false;
+        iconShiftModifier.classList.remove('active');
+        iconAlphaModifier.classList.remove('active');
+        syncWorkspaceDisplayView();
+    }
+
+    function deleteLastTokenChar() {
+        if (workspaceInputString.length > 0) {
+            workspaceInputString = workspaceInputString.slice(0, -1);
+            syncWorkspaceDisplayView();
+        }
+    }
+
+    function appendAnsRegister() {
+        workspaceInputString += "Ans";
+        syncWorkspaceDisplayView();
+    }
+
+    function processMPlusAccumulation() {
+        try {
+            let calculatedStr = workspaceInputString.replace(/Ans/g, backupLastAnsValue);
+            let evaluatingTokenValue = math.evaluate(calculatedStr);
+            memoryRegisterValue += evaluatingTokenValue;
+            viewResultNode.innerText = evaluatingTokenValue;
+        } catch(e) {
+            viewResultNode.innerText = "Syntax ERROR";
+        }
+    }
+
+    function pipelineExecutionWorkflow() {
+        if (!workspaceInputString) return;
+        try {
+            // Evaluator block processing inside dynamic Base-N contexts sets
+            if (globalActiveMode === "BASE-N") {
+                let trackingRadixIntBase = 10;
+                if (activeRadix === "HEX") trackingRadixIntBase = 16;
+                else if (activeRadix === "BIN") trackingRadixIntBase = 2;
+                else if (activeRadix === "OCT") trackingRadixIntBase = 8;
+
+                let parsedRadixIntegerResult = parseInt(workspaceInputString, trackingRadixIntBase);
+                if (isNaN(parsedRadixIntegerResult)) {
+                    viewResultNode.innerText = "Syntax ERROR";
+                    return;
+                }
+
+                if (activeRadix === "DEC") viewResultNode.innerText = parsedRadixIntegerResult.toString(10);
+                else if (activeRadix === "HEX") viewResultNode.innerText = parsedRadixIntegerResult.toString(16).toUpperCase();
+                else if (activeRadix === "BIN") viewResultNode.innerText = parsedRadixIntegerResult.toString(2);
+                else if (activeRadix === "OCT") viewResultNode.innerText = parsedRadixIntegerResult.toString(8);
+
+                backupLastAnsValue = parsedRadixIntegerResult;
+                return;
+            }
+
+            // Normal COMP Algebraic Computation Pipeline
+            let standardFormulaString = workspaceInputString
+                .replace(/Ans/g, backupLastAnsValue)
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/π/g, 'pi');
+
+            let openingCount = (standardFormulaString.match(/\(/g) || []).length;
+            let closingCount = (standardFormulaString.match(/\)/g) || []).length;
+            while (openingCount > closingCount) {
+                standardFormulaString += ')';
+                openingCount--;
+            }
+
+            let computedValueResultOut = math.evaluate(standardFormulaString);
+
+            if (typeof computedValueResultOut === 'number') {
+                if (!Number.isInteger(computedValueResultOut)) {
+                    computedValueResultOut = parseFloat(computedValueResultOut.toFixed(10));
+                }
+                viewResultNode.innerText = computedValueResultOut;
+                backupLastAnsValue = computedValueResultOut;
+            } else {
+                viewResultNode.innerText = "Math ERROR";
+            }
+        } catch (error) {
+            viewResultNode.innerText = "Syntax ERROR";
+        }
+    }
+
+    function triggerSDTransformation() {
+        let displayValRaw = parseFloat(viewResultNode.innerText);
+        if (!isNaN(displayValRaw) && !Number.isInteger(displayValRaw)) {
+            let computationalFractionObj = math.fraction(displayValRaw);
+            viewResultNode.innerText = computationalFractionObj.n + "/" + computationalFractionObj.d;
+        }
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
